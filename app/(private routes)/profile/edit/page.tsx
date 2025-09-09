@@ -20,7 +20,7 @@ export default  function EditProfilePage(
       return alert("Username can't be empty!")
     }
       try {
-          const res = await patchUser(user?.email, username)
+          const res = await patchUser(username)
           if (res) {
               setUser(res)
               router.push('/profile');

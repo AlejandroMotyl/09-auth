@@ -1,7 +1,8 @@
 import { User } from "@/types/user";
 import { api } from "./api";
 import { cookies } from "next/headers";
-import { CheckSessionRequest } from "./clientApi";
+import { CheckSessionRequest, FetchParams, FetchResult } from "./clientApi";
+import { Note } from "@/types/note";
 
 
 export const checkSession = async () => {
@@ -26,4 +27,33 @@ export async function getUser(): Promise<User>{
     return getUserRep.data;
 }
 
+export async function fetchNotes(keyWord?: string, page?: number, tag?: string): Promise<FetchResult>{
+const cookieStore = await cookies()
+ tag = tag === "All" ? undefined : tag;
 
+const fetchParams:FetchParams = {
+    params: {
+    tag:tag,
+    page: page,
+    search: keyWord,
+    perPage: 9, 
+    },
+    headers: {
+        Cookie:cookieStore.toString()
+    }
+}
+
+const fetchResponse = await api.get<FetchResult>('/notes', fetchParams)
+return fetchResponse.data;
+}
+
+export async function fetchNoteById(id: string): Promise<Note> {
+    const cookieStore = await cookies()
+    const fetchNoteByIdResponse = await api.get<Note>(`/notes/${id}`, {
+        headers: {
+            Cookie:cookieStore.toString()
+        }
+    })
+
+    return fetchNoteByIdResponse.data;
+}

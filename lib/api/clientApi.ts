@@ -3,24 +3,20 @@ import { api } from "./api";
 import { User } from "@/types/user";
 
 
-interface FetchResult{
+export interface FetchResult{
     notes: Note[],
     totalPages: number,
 }
 
-interface headersParams{
-    headers: {
-        Authorization: string,
-    }
-}
 
-interface FetchParams extends headersParams{
+export interface FetchParams{
     params: {
         tag?:string
         page?: number,
         search?: string,
         perPage: number,
     }
+    headers?: { Cookie:string }
 }
 interface CreateBody{
     title: string,
@@ -45,9 +41,7 @@ const fetchParams:FetchParams = {
     search: keyWord,
     perPage: 9, 
   },
-  headers: {
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
-  }
+
 }
 
 const fetchResponse = await api.get<FetchResult>('/notes', fetchParams)
@@ -60,20 +54,18 @@ export async function createNote({ title, content, tag }:CreateBody): Promise<No
         content: content,
         tag: tag,
     }
-    const createResponse = await api.post<Note>('/notes', createBody, { headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}` } })
+    const createResponse = await api.post<Note>('/notes', createBody)
     
     return createResponse.data;
 }
 
 export async function deleteNote(id: string):Promise<Note> {
-    const deleteResponse = await api.delete<Note>(`/notes/${id}`,
-    { headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`}})
+    const deleteResponse = await api.delete<Note>(`/notes/${id}`)
     return deleteResponse.data;
 }
 
 export async function fetchNoteById (id: string):Promise<Note> {
-    const fetchNoteByIdResponse = await api.get<Note>(`/notes/${id}`,
-    { headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`}})
+    const fetchNoteByIdResponse = await api.get<Note>(`/notes/${id}`)
     return fetchNoteByIdResponse.data;
 }
 
@@ -89,14 +81,14 @@ export async function login(email:string, password:string):Promise<User> {
     return loginRep.data;
 }
 
-export async function logout(): Promise<string>{
-    const logoutRep = await api.post<string>('/auth/logout')
+export async function logout(): Promise<{ message:string }>{
+    const logoutRep = await api.post<{ message:string }>('/auth/logout')
     
     return logoutRep.data;
 }
 
 
-export const checkSession = async () => {
+export async function checkSession (){
     const checkSessionRep = await api.get<CheckSessionRequest>('/auth/session');
     
   return checkSessionRep.data.success;
@@ -110,8 +102,8 @@ export async function getUser(): Promise<User>{
 }
 
 
-export async function patchUser(email?:string, username?:string): Promise<User>{
-    const patchUserRep = await api.patch<User>('/users/me', {email, username})
+export async function patchUser(username:string): Promise<User>{
+    const patchUserRep = await api.patch<User>('/users/me', {username})
 
     return patchUserRep.data;
 }

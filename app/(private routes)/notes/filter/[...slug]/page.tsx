@@ -1,6 +1,6 @@
 import { QueryClient, HydrationBoundary, dehydrate} from "@tanstack/react-query";
 import NotesClient from "@/app/(private routes)/notes/filter/[...slug]/Notes.client";
-import { fetchNotes } from "@/lib/api/clientApi";
+import { fetchNotes } from "@/lib/api/serverApi";
 import { Metadata } from "next";
 
 type NotesProps = {
