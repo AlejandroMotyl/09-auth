@@ -3,7 +3,7 @@
 import { useQuery,keepPreviousData } from '@tanstack/react-query';
 import { useParams, useRouter} from 'next/navigation';
 import css from './page.module.css';
-import { fetchNoteById } from '@/lib/api';
+import { fetchNoteById } from '@/lib/api/clientApi';
 import Loader from '@/components/Loader/Loader';
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import Modal from '@/components/Modal/Modal';

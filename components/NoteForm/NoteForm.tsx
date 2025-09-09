@@ -3,7 +3,7 @@ import css from './NoteForm.module.css';
 import * as Yup from "yup";
 import type { NoteTag } from '../../types/note';
 import type { FormValues } from '../../types/form';
-import { createNote} from '@/lib/api';
+import { createNote} from '@/lib/api/clientApi';
 import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNoteStore } from '@/lib/store/noteStore';

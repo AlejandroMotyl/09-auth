@@ -1,4 +1,4 @@
-import css from "@/app/notes/filter/layoutNotes.module.css"
+import css from "@/app/(private routes)/notes/filter/layoutNotes.module.css"
 
 type Props = {
     children: React.ReactNode;
